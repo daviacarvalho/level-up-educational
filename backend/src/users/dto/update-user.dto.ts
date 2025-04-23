@@ -20,7 +20,7 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   @MinLength(6)
-  senha?: string;
+  password?: string;
 
   @IsEnum(Role)
   @IsOptional()
