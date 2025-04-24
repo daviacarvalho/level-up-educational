@@ -2,13 +2,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { HashingServiceProtocol } from 'src/auth/hash/hashing.service';
-
 @Injectable()
 export class UsersService {
   constructor(
     private prisma: PrismaService,
     private hashingService: HashingServiceProtocol,
   ) {}
+
   async listAll() {
     const users = await this.prisma.user.findMany({
       select: {

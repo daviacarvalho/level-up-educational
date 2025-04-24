@@ -1,13 +1,18 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { AuthTokenGuard } from '../auth/guards/auth-token.guard';
+import { Request } from 'express';
+import { REQUEST_TOKEN_PAYLOAD_NAME } from 'src/auth/common/auth.constants';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAll() {
+  @UseGuards(AuthTokenGuard)
+  findAll(@Req() req: Request) {
+    console.log(req[REQUEST_TOKEN_PAYLOAD_NAME]?.name);
     return this.usersService.listAll();
   }
 
