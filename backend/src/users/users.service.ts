@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { HashingServiceProtocol } from 'src/auth/hash/hashing.service';
+import { Role } from './dto/role.enum'; // ajuste o caminho se necessário
 @Injectable()
 export class UsersService {
   constructor(
@@ -31,6 +32,22 @@ export class UsersService {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
 
+    if (createUserDto.role === Role.principal) {
+      if (!createUserDto.schoolId) {
+        throw new HttpException(
+          'schoolId is required for directors',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const school = await this.prisma.school.findUnique({
+        where: { id: createUserDto.schoolId },
+      });
+      if (!school) {
+        throw new HttpException('School not found', HttpStatus.BAD_REQUEST);
+      }
+    }
+
     const hashedPassword = await this.hashingService.hash(
       createUserDto.password,
     );
@@ -42,6 +59,7 @@ export class UsersService {
         password: hashedPassword,
         role: createUserDto.role,
         classId: createUserDto.classId,
+        schoolId: createUserDto.schoolId,
       },
     });
     const { password, ...userWithoutPassword } = newUser;

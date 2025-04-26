@@ -132,7 +132,21 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
-  classId: 'classId'
+  classId: 'classId',
+  schoolId: 'schoolId',
+  xp: 'xp'
+};
+
+exports.Prisma.InviteScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  role: 'role',
+  schoolId: 'schoolId',
+  classId: 'classId',
+  token: 'token',
+  accepted: 'accepted',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
 };
 
 exports.Prisma.QuizScalarFieldEnum = {
@@ -175,13 +189,15 @@ exports.Prisma.NullsOrder = {
 exports.Role = exports.$Enums.Role = {
   student: 'student',
   teacher: 'teacher',
-  principal: 'principal'
+  principal: 'principal',
+  superadmin: 'superadmin'
 };
 
 exports.Prisma.ModelName = {
   School: 'School',
   Class: 'Class',
   User: 'User',
+  Invite: 'Invite',
   Quiz: 'Quiz',
   Question: 'Question',
   Choice: 'Choice',

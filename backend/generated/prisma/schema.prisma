@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -18,22 +12,26 @@ enum Role {
   student
   teacher
   principal
+  superadmin
 }
 
 model School {
-  id      Int     @id @default(autoincrement())
+  id      Int      @id @default(autoincrement())
   name    String
   city    String?
   classes Class[]
+  users   User[]
+  invites Invite[]
 }
 
 model Class {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
   schoolId Int
-  school   School @relation(fields: [schoolId], references: [id])
+  school   School   @relation(fields: [schoolId], references: [id])
   users    User[]
   quizzes  Quiz[]
+  invites  Invite[]
 }
 
 model User {
@@ -42,9 +40,26 @@ model User {
   email    String       @unique
   password String
   role     Role
-  classId  Int? // FK para turma (aluno)
+  classId  Int?
   class    Class?       @relation(fields: [classId], references: [id])
+  schoolId Int?
+  school   School?      @relation(fields: [schoolId], references: [id])
+  xp       Int          @default(0)
   answers  QuizAnswer[]
+}
+
+model Invite {
+  id        Int      @id @default(autoincrement())
+  email     String
+  role      Role
+  schoolId  Int
+  classId   Int?
+  token     String   @unique
+  accepted  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  school    School   @relation(fields: [schoolId], references: [id])
+  class     Class?   @relation(fields: [classId], references: [id])
 }
 
 model Quiz {
