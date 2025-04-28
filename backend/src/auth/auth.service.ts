@@ -21,7 +21,6 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email: loginDto.email },
     });
-
     if (!user) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
     }
@@ -51,12 +50,12 @@ export class AuthService {
         issuer: this.jwtConfiguration.issuer,
       },
     );
-    console.log(token);
 
     return {
       id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role,
       token: token,
     };
   }

@@ -7,7 +7,9 @@ export class SchoolService {
   constructor(private prisma: PrismaService) {}
 
   async listAll() {
-    return this.prisma.school.findMany();
+    const schools = await this.prisma.school.findMany();
+    console.log(schools);
+    return schools;
   }
 
   async create(createSchoolDto: CreateSchoolDto) {

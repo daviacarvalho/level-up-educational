@@ -48,6 +48,12 @@ export class AuthTokenGuard implements CanActivate {
       return;
     }
 
-    return authorization;
+    const [type, token] = authorization.split(' ');
+    
+    if (type !== 'Bearer') {
+      return;
+    }
+    
+    return token;
   }
 }

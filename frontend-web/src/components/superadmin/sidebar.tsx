@@ -1,18 +1,42 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LogOut, Mail, School, User } from "lucide-react";
+import { LogOut, School, User, LayoutDashboard } from "lucide-react";
+import { UserNav } from "@/components/auth/userNav";
 
-export function Sidebar() {
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+};
+
+export const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
   const superAdminNavItems = [
     {
       title: "Dashboard",
       href: "/superadmin",
-      icon: School,
+      icon: LayoutDashboard,
     },
     {
       title: "Schools",
@@ -24,12 +48,12 @@ export function Sidebar() {
       href: "/superadmin/principals",
       icon: User,
     },
-    {
-      title: "Invites",
-      href: "/superadmin/invites",
-      icon: Mail,
-    },
   ];
+
+  const handleLogout = () => {
+    logout();
+    router.push("/auth/login");
+  };
 
   return (
     <div className="flex flex-col h-full w-64 border-r bg-background">
@@ -40,7 +64,7 @@ export function Sidebar() {
               XP
             </span>
           </div>
-          <span className="font-bold text-lg">LUE</span>
+          <span className="font-bold text-lg">Level Up Edu</span>
         </div>
       </div>
       <div className="flex-1 overflow-auto py-2">
@@ -66,14 +90,18 @@ export function Sidebar() {
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-              <span className="text-sm font-medium">{"A"}</span>
+              <span className="text-sm font-medium">
+                {user?.name?.charAt(0) || "U"}
+              </span>
             </div>
             <div className="space-y-0.5">
-              <p className="text-sm font-medium">John Doe</p>
-              <p className="text-xs text-muted-foreground">Super Admin</p>
+              <p className="text-sm font-medium">{user?.name || "User"}</p>
+              <p className="text-xs text-muted-foreground">
+                {user?.role || "Role"}
+              </p>
             </div>
           </div>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             Sair
           </Button>
@@ -81,4 +109,4 @@ export function Sidebar() {
       </div>
     </div>
   );
-}
+};

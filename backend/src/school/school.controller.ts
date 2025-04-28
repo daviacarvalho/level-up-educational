@@ -10,8 +10,7 @@ export class SchoolController {
 
   @Get()
   @UseGuards(AuthTokenGuard)
-  findAll(@Req() req: Request) {
-    console.log(req[REQUEST_TOKEN_PAYLOAD_NAME]?.name);
+  findAll() {
     return this.schoolService.listAll();
   }
 

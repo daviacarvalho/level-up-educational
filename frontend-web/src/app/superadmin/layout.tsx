@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { Sidebar } from "@/components/superadmin/sidebar";
+import { ProtectedRoute } from "@/components/auth/protectedRoute";
 
 export default function DashboardLayout({
   children,
@@ -9,11 +10,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+    <ProtectedRoute>
+      <div className="flex h-screen bg-background">
+        <Sidebar />
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }
