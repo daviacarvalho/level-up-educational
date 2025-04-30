@@ -36,7 +36,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Mock data for principals
 const mockPrincipals = [
   {
     id: "1",
@@ -80,7 +79,6 @@ const mockPrincipals = [
   },
 ];
 
-// Mock data for schools (for dropdown selection)
 const mockSchools = [
   { id: "1", name: "Lincoln High School" },
   { id: "2", name: "Washington Elementary" },
@@ -95,7 +93,6 @@ export default function PrincipalsPage() {
   const [principals, setPrincipals] = useState(mockPrincipals);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
   const [currentPrincipal, setCurrentPrincipal] = useState(null);
   const [newPrincipal, setNewPrincipal] = useState({
     name: "",
@@ -103,8 +100,6 @@ export default function PrincipalsPage() {
     phone: "",
     school: "",
   });
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [selectedSchool, setSelectedSchool] = useState("");
 
   const handleCreatePrincipal = () => {
     const principalToAdd = {
@@ -132,26 +127,11 @@ export default function PrincipalsPage() {
     setPrincipals(principals.filter((principal) => principal.id !== id));
   };
 
-  const handleSendInvite = () => {
-    // In a real application, this would send an API request to send an invitation
-    alert(`Invitation sent to ${inviteEmail} for ${selectedSchool}`);
-    setInviteEmail("");
-    setSelectedSchool("");
-    setIsInviteDialogOpen(false);
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Principals</h1>
         <div className="flex space-x-2">
-          <Button
-            variant="outline"
-            onClick={() => setIsInviteDialogOpen(true)}
-          >
-            <Mail className="mr-2 h-4 w-4" />
-            Invite Principal
-          </Button>
           <Button onClick={() => setIsCreateDialogOpen(true)}>
             <PlusCircle className="mr-2 h-4 w-4" />
             Add Principal
@@ -230,7 +210,6 @@ export default function PrincipalsPage() {
         </CardContent>
       </Card>
 
-      {/* Create Principal Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -317,7 +296,6 @@ export default function PrincipalsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Principal Dialog */}
       {currentPrincipal && (
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent>
@@ -382,9 +360,10 @@ export default function PrincipalsPage() {
                   School
                 </Label>
                 <Select
-                  defaultValue={mockSchools.find(
-                    (s) => s.name === currentPrincipal.school
-                  )?.id}
+                  defaultValue={
+                    mockSchools.find((s) => s.name === currentPrincipal.school)
+                      ?.id
+                  }
                   onValueChange={(value) =>
                     setCurrentPrincipal({
                       ...currentPrincipal,
@@ -418,62 +397,6 @@ export default function PrincipalsPage() {
           </DialogContent>
         </Dialog>
       )}
-
-      {/* Invite Principal Dialog */}
-      <Dialog open={isInviteDialogOpen} onOpenChange={setIsInviteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Invite Principal</DialogTitle>
-            <DialogDescription>
-              Send an invitation to a new principal to join the platform.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="invite-email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="invite-email"
-                type="email"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                className="col-span-3"
-                placeholder="principal@school.edu"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="invite-school" className="text-right">
-                School
-              </Label>
-              <Select
-                value={selectedSchool}
-                onValueChange={setSelectedSchool}
-              >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select a school" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockSchools.map((school) => (
-                    <SelectItem key={school.id} value={school.name}>
-                      {school.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsInviteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleSendInvite}>Send Invitation</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

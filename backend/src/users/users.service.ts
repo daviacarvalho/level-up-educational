@@ -23,6 +23,31 @@ export class UsersService {
     return users;
   }
 
+  async listUsersByRole(role: Role) {
+    const users = await this.prisma.user.findMany({
+      where: {
+        role: role,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        classId: true,
+        schoolId: true,
+        school:
+          role === Role.principal
+            ? {
+                select: {
+                  name: true,
+                },
+              }
+            : false,
+      },
+    });
+    return users;
+  }
+
   async create(createUserDto: CreateUserDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: { email: createUserDto.email },

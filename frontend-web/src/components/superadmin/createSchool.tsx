@@ -14,9 +14,10 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { fetchAdapter } from "@/lib/fetchAdapter";
 import { toast } from "sonner";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, PlusCircle } from "lucide-react";
 
-export const CreateSchool = ({ open, onOpenChange }) => {
+export const CreateSchool = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -31,7 +32,7 @@ export const CreateSchool = ({ open, onOpenChange }) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (!name.trim() || !city.trim()) {
+    if (!name || !city) {
       toast.error("Please fill all fields");
       return;
     }
@@ -42,8 +43,8 @@ export const CreateSchool = ({ open, onOpenChange }) => {
         method: "POST",
         path: "school",
         body: {
-          name: name.trim(),
-          city: city.trim(),
+          name: name,
+          city: city,
         },
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -52,18 +53,16 @@ export const CreateSchool = ({ open, onOpenChange }) => {
         toast.success("School created successfully");
         setName("");
         setCity("");
-        onOpenChange(false);
-        window.location.reload();
+        setIsOpen(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         toast.error(`Error: ${response.status}`);
       }
     } catch (error: any) {
-      console.error("Error creating school:", error);
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to create school";
-      toast.error(errorMessage);
+      console.log(error);
+      toast.error("Failed to create school");
     } finally {
       setSubmitting(false);
     }
@@ -71,7 +70,12 @@ export const CreateSchool = ({ open, onOpenChange }) => {
 
   return (
     <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
+      <Button onClick={() => setIsOpen(true)}>
+        <PlusCircle className="mr-2 h-4 w-4" />
+        Add School
+      </Button>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add New School</DialogTitle>
@@ -109,7 +113,7 @@ export const CreateSchool = ({ open, onOpenChange }) => {
             <DialogFooter>
               <Button
                 variant="outline"
-                onClick={() => onOpenChange(false)}
+                onClick={() => setIsOpen(false)}
                 type="button"
               >
                 Cancel

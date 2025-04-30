@@ -62,7 +62,7 @@ export const ListSchools = ({ onEdit, onDelete }) => {
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
-          <TableHead>Address</TableHead>
+          <TableHead>City</TableHead>
           <TableHead>Principal</TableHead>
           <TableHead className="text-right">Actions</TableHead>
         </TableRow>

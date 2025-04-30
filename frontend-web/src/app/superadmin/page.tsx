@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { School, User, Mail, Activity } from "lucide-react";
 
 export default function SuperAdminDashboard() {
-  // Mock data for testing
   const stats = [
     {
       title: "Total Schools",

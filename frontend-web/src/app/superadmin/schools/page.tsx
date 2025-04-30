@@ -18,10 +18,7 @@ export default function SchoolsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Schools</h1>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Add School
-        </Button>
+        <CreateSchool />
       </div>
       <Card>
         <CardHeader>
@@ -37,16 +34,10 @@ export default function SchoolsPage() {
           />
         </CardContent>
       </Card>
-      <CreateSchool
-        open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
-        // onCreate={...} // Implemente a lógica de criação conforme necessário
-      />
       <EditSchool
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
         school={currentSchool}
-        // onEdit={...} // Implemente a lógica de edição conforme necessário
       />
     </div>
   );
