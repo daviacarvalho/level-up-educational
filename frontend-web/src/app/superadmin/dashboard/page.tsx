@@ -1,7 +1,5 @@
-export const Dashboard = () => {
-  return (
-    <>
-      <h1>Dashboard</h1>
-    </>
-  );
-};
+import SuperAdminDashboard from "@/components/superadmin/dashboard";
+
+export default function DashboardPage() {
+  return <SuperAdminDashboard />;
+}

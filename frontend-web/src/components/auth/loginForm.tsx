@@ -126,7 +126,6 @@ export function LoginForm() {
         }
       } catch (error) {
         console.error("Navigation error:", error);
-        // Fallback navigation if the router.push fails
         window.location.href = user.role ? `/${user.role}` : "/";
       }
     }

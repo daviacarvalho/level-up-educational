@@ -17,28 +17,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
 import { fetchAdapter } from "@/lib/fetchAdapter";
+import React, { useEffect, useState } from "react";
+
 type Principal = {
   id: number;
   name: string;
   email: string;
   role: "principal";
-};
-type School = {
-  id: string;
-  name: string;
-  city: string;
-  principalName: string;
-  principal?: Principal;
+  school?: {
+    id: string;
+    name: string;
+  };
 };
 
-export const ListSchools = () => {
-  const [schools, setSchools] = useState<School[]>([]);
+export const ListPrincipals = () => {
+  const [principals, setPrincipals] = useState<Principal[]>([]);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredSchools, setFilteredSchools] = useState<School[]>([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -47,23 +44,22 @@ export const ListSchools = () => {
     }
   }, []);
 
-  const getSchools = async () => {
+  const getPrincipals = async () => {
     setLoading(true);
     try {
       const response = await fetchAdapter({
         method: "GET",
-        path: "school",
+        path: "users/principal",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.status == 200) {
-        const schoolsData = response.data;
-        setSchools(schoolsData);
+        setPrincipals(response.data);
       }
     } catch (error) {
       console.log(error);
-      setSchools([]);
+      setPrincipals([]);
     } finally {
       setLoading(false);
     }
@@ -71,26 +67,15 @@ export const ListSchools = () => {
 
   useEffect(() => {
     if (token) {
-      getSchools();
+      getPrincipals();
     }
   }, [token]);
 
-  useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setFilteredSchools(schools);
-    } else {
-      const filtered = schools.filter(
-        (school) =>
-          school.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          school.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (school.principalName &&
-            school.principalName
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase()))
-      );
-      setFilteredSchools(filtered);
-    }
-  }, [searchTerm, schools]);
+  const filteredPrincipals = principals
+    .filter((principal) =>
+      principal.name.toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="space-y-4">
@@ -99,23 +84,23 @@ export const ListSchools = () => {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search schools by name..."
+            placeholder="Search principals by name..."
             className="pl-8 w-full"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>
       {loading ? (
         <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          <p className="ml-3 text-muted-foreground">Loading schools...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary loading-spinner"></div>
+          <p className="ml-3 text-muted-foreground">Loading principals...</p>
         </div>
-      ) : filteredSchools.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-40 bg-muted/20 rounded-lg border border-dashed border-muted p-8">
-          <p className="text-lg font-medium mb-2">No schools found</p>
+      ) : filteredPrincipals.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-40 bg-muted/20 rounded-lg border border-dashed border-muted p-8 empty-state-pulse">
+          <p className="text-lg font-medium mb-2">No principals found</p>
           <p className="text-sm text-muted-foreground text-center">
-            Add a new school to get started.
+            Add a new principal to get started.
           </p>
         </div>
       ) : (
@@ -124,57 +109,46 @@ export const ListSchools = () => {
             <TableHeader className="bg-muted/50">
               <TableRow>
                 <TableHead className="font-semibold">Name</TableHead>
-                <TableHead className="font-semibold">City</TableHead>
-                <TableHead className="font-semibold">Principal</TableHead>
-                <TableHead className="font-semibold">Principal Email</TableHead>
+                <TableHead className="font-semibold">Email</TableHead>
+                <TableHead className="font-semibold">School</TableHead>
                 <TableHead className="text-right font-semibold">
                   Actions
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredSchools.map((school, index) => (
+              {filteredPrincipals.map((principal, index) => (
                 <TableRow
-                  key={school.id}
+                  key={principal.id}
                   className={`transition-colors hover:bg-muted/30 table-row-hover table-row-fade-in ${
                     index % 2 === 0 ? "bg-background" : "bg-muted/10"
                   }`}
                   style={{ animationDelay: `${0.05 * index}s` }}
                 >
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                        {principal.name.charAt(0)}
+                      </div>
+                      <span>{principal.name}</span>
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 flex items-center justify-center font-semibold">
-                        {school.name.charAt(0)}
-                      </div>
-                      <span className="font-medium">{school.name}</span>
+                      <span className="text-muted-foreground">
+                        {principal.email}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
-                      {school.city}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {school.principalName ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 flex items-center justify-center text-xs font-semibold">
-                          {school.principalName.charAt(0)}
-                        </div>
-                        <span>{school.principalName}</span>
-                      </div>
+                    {principal.school?.name ? (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-500">
+                        {principal.school.name}
+                      </span>
                     ) : (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-500">
                         Not assigned
                       </span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {school.principal?.email ? (
-                      <span className="text-muted-foreground text-sm">
-                        {school.principal.email}
-                      </span>
-                    ) : (
-                      <span className="text-muted-foreground text-sm">N/A</span>
                     )}
                   </TableCell>
                   <TableCell className="text-right">

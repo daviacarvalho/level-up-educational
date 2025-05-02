@@ -14,14 +14,14 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { fetchAdapter } from "@/lib/fetchAdapter";
 import { toast } from "sonner";
-import { RotateCcw, PlusCircle } from "lucide-react";
+import { RotateCcw, PlusCircle, Building2 } from "lucide-react";
 
 export const CreateSchool = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -53,7 +53,7 @@ export const CreateSchool = () => {
         toast.success("School created successfully");
         setName("");
         setCity("");
-        setIsOpen(false);
+        setOpen(false);
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -70,35 +70,41 @@ export const CreateSchool = () => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>
-        <PlusCircle className="mr-2 h-4 w-4" />
-        Add School
-      </Button>
-
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <Button
+          onClick={() => setOpen(true)}
+          className="bg-primary hover:bg-primary/90 transition-colors"
+        >
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Add School
+        </Button>
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Add New School</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+              <Building2 className="h-5 w-5" />
+              Add New School
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
               Enter the details for the new school below.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
+            <div className="grid gap-5 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name" className="text-sm font-medium">
+                  School Name
                 </Label>
                 <Input
                   id="name"
                   name="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="col-span-3"
+                  placeholder="Enter school name"
+                  className="w-full"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="city" className="text-right">
+              <div className="grid gap-2">
+                <Label htmlFor="city" className="text-sm font-medium">
                   City
                 </Label>
                 <Input
@@ -106,21 +112,30 @@ export const CreateSchool = () => {
                   name="city"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="col-span-3"
+                  placeholder="Enter city name"
+                  className="w-full"
                 />
               </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="flex justify-between sm:justify-end gap-2">
               <Button
                 variant="outline"
-                onClick={() => setIsOpen(false)}
                 type="button"
+                className="w-full sm:w-auto"
+                onClick={() => setOpen(false)}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="w-full sm:w-auto bg-primary hover:bg-primary/90 transition-colors"
+              >
                 {submitting ? (
-                  <RotateCcw className="animate-spin" />
+                  <>
+                    <RotateCcw className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
                 ) : (
                   "Create School"
                 )}

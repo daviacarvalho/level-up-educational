@@ -24,10 +24,8 @@ export class UsersService {
   }
 
   async listUsersByRole(role: Role) {
-    const users = await this.prisma.user.findMany({
-      where: {
-        role: role,
-      },
+    return this.prisma.user.findMany({
+      where: { role },
       select: {
         id: true,
         name: true,
@@ -35,17 +33,11 @@ export class UsersService {
         role: true,
         classId: true,
         schoolId: true,
-        school:
-          role === Role.principal
-            ? {
-                select: {
-                  name: true,
-                },
-              }
-            : false,
+        school: {
+          select: { name: true },
+        },
       },
     });
-    return users;
   }
 
   async create(createUserDto: CreateUserDto) {

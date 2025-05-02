@@ -14,7 +14,10 @@ export default function DashboardLayout({
       <div className="flex h-screen bg-background">
         <Sidebar />
         <div className="flex flex-col flex-1 overflow-hidden">
-          <main className="flex-1 overflow-y-auto p-6">{children}</main>
+          <header className="h-16 border-b flex items-center px-6 bg-background/95 backdrop-blur-sm sticky top-0 z-10">
+            <h1 className="text-xl font-semibold">Super Admin Portal</h1>
+          </header>
+          <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
         </div>
       </div>
     </ProtectedRoute>

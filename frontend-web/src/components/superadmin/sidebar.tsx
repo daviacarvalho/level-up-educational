@@ -35,7 +35,7 @@ export const Sidebar = () => {
   const superAdminNavItems = [
     {
       title: "Dashboard",
-      href: "/superadmin",
+      href: "/superadmin/dashboard",
       icon: LayoutDashboard,
     },
     {
@@ -56,43 +56,59 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-64 border-r bg-background">
-      <div className="flex h-14 items-center border-b px-4">
+    <div className="flex flex-col h-full w-64 border-r bg-background shadow-sm">
+      <div className="flex h-16 items-center border-b px-6">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-lg">Welcome, admin!</span>
+          <span className="font-bold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Super Admin Portal
+          </span>
         </div>
       </div>
-      <div className="flex-1 overflow-auto py-2">
-        <nav className="grid items-start px-2 gap-1">
+      <div className="flex-1 overflow-auto py-4">
+        <div className="px-6 mb-4">
+          <p className="text-xs uppercase font-semibold text-muted-foreground tracking-wider">
+            Main Navigation
+          </p>
+        </div>
+        <nav className="grid items-start px-3 gap-1">
           {superAdminNavItems.map((item, index) => (
             <Link
               key={index}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-300 ease-in-out",
+                "sidebar-item flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-300 ease-in-out",
                 pathname === item.href
-                  ? "bg-accent text-accent-foreground"
-                  : "hover:bg-accent/20 hover:text-accent-foreground"
+                  ? "bg-primary/10 text-primary border-l-2 border-primary"
+                  : "hover:bg-accent/10 hover:text-accent-foreground hover:border-l-2 hover:border-primary/50"
               )}
             >
-              <item.icon className="h-4 w-4" />
-              {item.title}
+              <item.icon
+                className={cn(
+                  "h-5 w-5 transition-transform duration-300",
+                  pathname === item.href
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              />
+              <span className={pathname === item.href ? "font-semibold" : ""}>
+                {item.title}
+              </span>
             </Link>
           ))}
         </nav>
       </div>
-      <div className="border-t p-4">
+      <div className="border-t p-4 bg-muted/30">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-              <span className="text-sm font-medium">
+          <div className="flex items-center gap-3 p-2">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center ring-2 ring-primary/20">
+              <span className="text-sm font-medium text-primary">
                 {user?.name?.charAt(0) || "U"}
               </span>
             </div>
             <div className="space-y-0.5">
               <p className="text-sm font-medium">{user?.name || "User"}</p>
               <p className="text-xs text-muted-foreground">
-                {user?.role || " "}
+                {user?.role || "Super Admin"}
               </p>
             </div>
           </div>
@@ -100,7 +116,7 @@ export const Sidebar = () => {
             variant="outline"
             size="sm"
             onClick={handleLogout}
-            className="transition-all duration-300 ease-in-out"
+            className="transition-all duration-300 ease-in-out hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 w-full justify-start"
           >
             <LogOut className="mr-2 h-4 w-4" />
             Logout
