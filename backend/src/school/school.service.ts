@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { Role } from '../../generated/prisma';
@@ -45,5 +45,21 @@ export class SchoolService {
       data: createSchoolDto,
     });
     return newSchool;
+  }
+
+  async delete(id: number) {
+    const findSchool = await this.prisma.school.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!findSchool) {
+      throw new HttpException('Task not found', HttpStatus.NOT_FOUND);
+    }
+
+    const deletedSchool = await this.prisma.school.delete({
+      where: { id: findSchool.id },
+    });
+
+    return deletedSchool;
   }
 }

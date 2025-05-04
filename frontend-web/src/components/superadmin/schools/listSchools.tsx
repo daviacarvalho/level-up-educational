@@ -17,25 +17,28 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from "react";
 import { fetchAdapter } from "@/lib/fetchAdapter";
-import React, { useEffect, useState } from "react";
-
+import { DeleteSchool } from "./deleteSchool";
 type Principal = {
   id: number;
   name: string;
   email: string;
   role: "principal";
-  school?: {
-    id: string;
-    name: string;
-  };
+};
+type School = {
+  id: string;
+  name: string;
+  city: string;
+  principalName: string;
+  principal?: Principal;
 };
 
-export const ListPrincipals = () => {
-  const [principals, setPrincipals] = useState<Principal[]>([]);
+export const ListSchools = () => {
+  const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState("");
-  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -44,22 +47,23 @@ export const ListPrincipals = () => {
     }
   }, []);
 
-  const getPrincipals = async () => {
+  const getSchools = async () => {
     setLoading(true);
     try {
       const response = await fetchAdapter({
         method: "GET",
-        path: "users/principal",
+        path: "school",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.status == 200) {
-        setPrincipals(response.data);
+        const schoolsData = response.data;
+        setSchools(schoolsData);
       }
     } catch (error) {
       console.log(error);
-      setPrincipals([]);
+      setSchools([]);
     } finally {
       setLoading(false);
     }
@@ -67,13 +71,13 @@ export const ListPrincipals = () => {
 
   useEffect(() => {
     if (token) {
-      getPrincipals();
+      getSchools();
     }
   }, [token]);
 
-  const filteredPrincipals = principals
-    .filter((principal) =>
-      principal.name.toLowerCase().includes(search.toLowerCase())
+  const filteredSchools = schools
+    .filter((school) =>
+      school.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -84,23 +88,23 @@ export const ListPrincipals = () => {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search principals by name..."
+            placeholder="Search schools by name..."
             className="pl-8 w-full"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
       {loading ? (
         <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary loading-spinner"></div>
-          <p className="ml-3 text-muted-foreground">Loading principals...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          <p className="ml-3 text-muted-foreground">Loading schools...</p>
         </div>
-      ) : filteredPrincipals.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-40 bg-muted/20 rounded-lg border border-dashed border-muted p-8 empty-state-pulse">
-          <p className="text-lg font-medium mb-2">No principals found</p>
+      ) : filteredSchools.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-40 bg-muted/20 rounded-lg border border-dashed border-muted p-8">
+          <p className="text-lg font-medium mb-2">No schools found</p>
           <p className="text-sm text-muted-foreground text-center">
-            Add a new principal to get started.
+            Add a new school to get started.
           </p>
         </div>
       ) : (
@@ -109,58 +113,61 @@ export const ListPrincipals = () => {
             <TableHeader className="bg-muted/50">
               <TableRow>
                 <TableHead className="font-semibold">Name</TableHead>
-                <TableHead className="font-semibold">Email</TableHead>
-                <TableHead className="font-semibold">School</TableHead>
+                <TableHead className="font-semibold">City</TableHead>
+                <TableHead className="font-semibold">Principal</TableHead>
+                <TableHead className="font-semibold">Principal Email</TableHead>
                 <TableHead className="text-right font-semibold">
                   Actions
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredPrincipals.map((principal, index) => (
+              {filteredSchools.map((school, index) => (
                 <TableRow
-                  key={principal.id}
+                  key={school.id}
                   className={`transition-colors hover:bg-muted/30 table-row-hover table-row-fade-in ${
                     index % 2 === 0 ? "bg-background" : "bg-muted/10"
                   }`}
                   style={{ animationDelay: `${0.05 * index}s` }}
                 >
-                  <TableCell className="font-medium">
+                  <TableCell>
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                        {principal.name.charAt(0)}
+                      <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 flex items-center justify-center font-semibold">
+                        {school.name.charAt(0)}
                       </div>
-                      <span>{principal.name}</span>
+                      <span className="font-medium">{school.name}</span>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">
-                        {principal.email}
-                      </span>
+                    <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                      {school.city}
                     </div>
                   </TableCell>
                   <TableCell>
-                    {principal.school?.name ? (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-500">
-                        {principal.school.name}
-                      </span>
+                    {school.principalName ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 flex items-center justify-center text-xs font-semibold">
+                          {school.principalName.charAt(0)}
+                        </div>
+                        <span>{school.principalName}</span>
+                      </div>
                     ) : (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-500">
                         Not assigned
                       </span>
                     )}
                   </TableCell>
+                  <TableCell>
+                    {school.principal?.email ? (
+                      <span className="text-muted-foreground text-sm">
+                        {school.principal.email}
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground text-sm">N/A</span>
+                    )}
+                  </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                      >
-                        <Pencil className="h-4 w-4" />
-                        <span className="sr-only">Edit</span>
-                      </Button>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -173,13 +180,14 @@ export const ListPrincipals = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuItem className="cursor-pointer">
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600 cursor-pointer focus:text-red-700 focus:bg-red-100 dark:focus:bg-red-900/50">
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
+                          <DropdownMenuItem
+                            className="text-red-600 cursor-pointer focus:text-red-700 focus:bg-red-100 dark:focus:bg-red-900/50"
+                            onSelect={(e) => e.preventDefault()}
+                          >
+                            <DeleteSchool
+                              school={{ id: school.id, name: school.name }}
+                              variant="menu-item"
+                            />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

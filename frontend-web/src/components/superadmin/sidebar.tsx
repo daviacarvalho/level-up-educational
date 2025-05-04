@@ -6,7 +6,6 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LogOut, School, User, LayoutDashboard } from "lucide-react";
-import { UserNav } from "@/components/auth/userNav";
 
 type User = {
   id: string;

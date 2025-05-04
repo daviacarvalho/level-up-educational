@@ -1,9 +1,17 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { School, User, Mail, Activity, TrendingUp, Clock, Bell } from "lucide-react";
+import {
+  School,
+  User,
+  Mail,
+  Activity,
+  TrendingUp,
+  Clock,
+  Bell,
+} from "lucide-react";
 
-export default function SuperAdminDashboard() {
+export const SuperAdminDashboard = () => {
   const stats = [
     {
       title: "Total Schools",
@@ -43,12 +51,17 @@ export default function SuperAdminDashboard() {
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome to your super admin dashboard.</p>
+        <p className="text-muted-foreground">
+          Welcome to your super admin dashboard.
+        </p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => (
-          <Card key={index} className="dashboard-item card-hover-effect overflow-hidden transition-all duration-300 hover:shadow-md">
+          <Card
+            key={index}
+            className="dashboard-item card-hover-effect overflow-hidden transition-all duration-300 hover:shadow-md"
+          >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {stat.title}
@@ -76,7 +89,9 @@ export default function SuperAdminDashboard() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card className="md:col-span-2 transition-all duration-300 hover:shadow-md card-hover-effect">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-semibold">Recent Activities</CardTitle>
+            <CardTitle className="text-lg font-semibold">
+              Recent Activities
+            </CardTitle>
             <Bell className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -111,7 +126,11 @@ export default function SuperAdminDashboard() {
                   color: "bg-purple-500/10 text-purple-500",
                 },
               ].map((activity, i) => (
-                <div key={i} className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors duration-200 dashboard-item" style={{animationDelay: `${0.1 + i * 0.1}s`}}>
+                <div
+                  key={i}
+                  className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors duration-200 dashboard-item"
+                  style={{ animationDelay: `${0.1 + i * 0.1}s` }}
+                >
                   <div className={`p-2 rounded-full ${activity.color}`}>
                     <activity.icon className="h-4 w-4" />
                   </div>
@@ -135,14 +154,31 @@ export default function SuperAdminDashboard() {
 
         <Card className="transition-all duration-300 hover:shadow-md card-hover-effect">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold">System Status</CardTitle>
+            <CardTitle className="text-lg font-semibold">
+              System Status
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-5">
               {[
-                { name: "API Server", status: "Operational", uptime: "99.9%", color: "bg-green-500" },
-                { name: "Database", status: "Operational", uptime: "99.7%", color: "bg-green-500" },
-                { name: "Storage", status: "Operational", uptime: "100%", color: "bg-green-500" },
+                {
+                  name: "API Server",
+                  status: "Operational",
+                  uptime: "99.9%",
+                  color: "bg-green-500",
+                },
+                {
+                  name: "Database",
+                  status: "Operational",
+                  uptime: "99.7%",
+                  color: "bg-green-500",
+                },
+                {
+                  name: "Storage",
+                  status: "Operational",
+                  uptime: "100%",
+                  color: "bg-green-500",
+                },
                 {
                   name: "Authentication",
                   status: "Operational",
@@ -150,7 +186,11 @@ export default function SuperAdminDashboard() {
                   color: "bg-green-500",
                 },
               ].map((service, i) => (
-                <div key={i} className="space-y-2 dashboard-item" style={{animationDelay: `${0.5 + i * 0.1}s`}}>
+                <div
+                  key={i}
+                  className="space-y-2 dashboard-item"
+                  style={{ animationDelay: `${0.5 + i * 0.1}s` }}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div
@@ -158,11 +198,13 @@ export default function SuperAdminDashboard() {
                       ></div>
                       <p className="text-sm font-medium">{service.name}</p>
                     </div>
-                    <div className="text-xs font-medium text-green-500">{service.uptime}</div>
+                    <div className="text-xs font-medium text-green-500">
+                      {service.uptime}
+                    </div>
                   </div>
                   <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full ${service.color} transition-all duration-1000 ease-in-out`} 
+                    <div
+                      className={`h-full ${service.color} transition-all duration-1000 ease-in-out`}
                       style={{ width: service.uptime }}
                     ></div>
                   </div>
@@ -174,4 +216,4 @@ export default function SuperAdminDashboard() {
       </div>
     </div>
   );
-}
+};

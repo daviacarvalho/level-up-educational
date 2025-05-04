@@ -20,7 +20,7 @@ type User = {
   role: string;
 };
 
-export function UserNav() {
+export const UserNav = () => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
@@ -77,4 +77,4 @@ export function UserNav() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};

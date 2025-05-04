@@ -6,8 +6,8 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { ListSchools } from "@/components/superadmin/listSchools";
-import { CreateSchool } from "@/components/superadmin/createSchool";
+import { ListSchools } from "@/components/superadmin/schools/listSchools";
+import { CreateSchool } from "@/components/superadmin/schools/createSchool";
 import { Building2 } from "lucide-react";
 
 export default function SchoolsPage() {

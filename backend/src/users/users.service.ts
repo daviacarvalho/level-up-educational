@@ -60,9 +60,27 @@ export class UsersService {
       const school = await this.prisma.school.findUnique({
         where: { id: createUserDto.schoolId },
       });
+
       if (!school) {
         throw new HttpException('School not found', HttpStatus.BAD_REQUEST);
       }
+
+      const tempPassword = Math.random().toString(36).slice(-8);
+      const hashedPassword = await this.hashingService.hash(tempPassword);
+      console.log('Temporary password generated:', tempPassword);
+      const newUser = await this.prisma.user.create({
+        data: {
+          name: createUserDto.name,
+          email: createUserDto.email,
+          password: hashedPassword,
+          role: createUserDto.role,
+          classId: createUserDto.classId,
+          schoolId: createUserDto.schoolId,
+        },
+      });
+
+      const { password, ...userWithoutPassword } = newUser;
+      return userWithoutPassword;
     }
 
     const hashedPassword = await this.hashingService.hash(
@@ -79,6 +97,7 @@ export class UsersService {
         schoolId: createUserDto.schoolId,
       },
     });
+
     const { password, ...userWithoutPassword } = newUser;
     return userWithoutPassword;
   }

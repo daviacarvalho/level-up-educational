@@ -14,14 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { fetchAdapter } from "@/lib/fetchAdapter";
 import { toast } from "sonner";
-import {
-  RotateCcw,
-  PlusCircle,
-  UserPlus,
-  Mail,
-  User,
-  Building2,
-} from "lucide-react";
+import { RotateCcw, UserPlus, Mail, User, Building2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -40,7 +33,7 @@ export const CreatePrincipal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [schoolId, setSchoolId] = useState("");
+  const [schoolId, setSchoolId] = useState("none");
   const [schools, setSchools] = useState<School[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [token, setToken] = useState<string | null>(null);
@@ -91,20 +84,21 @@ export const CreatePrincipal = () => {
     try {
       const response = await fetchAdapter({
         method: "POST",
-        path: "users/principal",
+        path: "users/create",
         body: {
           name,
           email,
-          schoolId: schoolId || undefined,
+          schoolId: Number(schoolId),
+          role: "principal",
+          password: "temporary_password",
         },
         headers: { Authorization: `Bearer ${token}` },
       });
-
+      console.log(response);
       if (response.status === 201 || response.status === 200) {
         toast.success("Principal created successfully");
         setName("");
         setEmail("");
-        setSchoolId("");
         setIsOpen(false);
         setTimeout(() => {
           window.location.reload();
@@ -119,6 +113,8 @@ export const CreatePrincipal = () => {
       setSubmitting(false);
     }
   };
+
+  console.log(schoolId);
 
   return (
     <>
@@ -187,11 +183,12 @@ export const CreatePrincipal = () => {
                     <SelectTrigger className="w-full">
                       <div className="flex items-center gap-2">
                         <Building2 className="h-4 w-4 text-muted-foreground" />
-                        <SelectValue placeholder="Select a school" />
+                        <SelectValue placeholder="Select a school (optional)" />
                       </div>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">None</SelectItem>
+                      {/* Opção para não selecionar nenhuma escola */}
+                      <SelectItem value="none">No school assigned</SelectItem>
                       {schools.map((school) => (
                         <SelectItem key={school.id} value={school.id}>
                           {school.name} ({school.city})

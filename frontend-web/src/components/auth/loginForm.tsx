@@ -17,7 +17,7 @@ type User = {
   role: string;
 };
 
-export function LoginForm() {
+export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -194,4 +194,4 @@ export function LoginForm() {
       </form>
     </div>
   );
-}
+};

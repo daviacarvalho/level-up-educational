@@ -7,8 +7,8 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { CreatePrincipal } from "@/components/superadmin/createPrincipal";
-import { ListPrincipals } from "@/components/superadmin/listPrincipals";
+import { CreatePrincipal } from "@/components/superadmin/principals/createPrincipal";
+import { ListPrincipals } from "@/components/superadmin/principals/listPrincipals";
 import { UserCheck } from "lucide-react";
 
 export default function PrincipalsPage() {

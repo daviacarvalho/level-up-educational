@@ -10,7 +10,7 @@ type User = {
   role: string;
 };
 
-export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,4 +45,4 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   return isAuthenticated ? <>{children}</> : null;
-}
+};

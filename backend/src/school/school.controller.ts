@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 import { CreateSchoolDto } from './dto/create-school.dto';
@@ -15,5 +23,10 @@ export class SchoolController {
   @Post()
   createSchool(@Body() createSchoolDto: CreateSchoolDto) {
     return this.schoolService.create(createSchoolDto);
+  }
+
+  @Delete(':id')
+  deleteSchool(@Param('id') id: number) {
+    return this.schoolService.delete(id);
   }
 }
