@@ -14,15 +14,15 @@ import { toast } from "sonner";
 import { Trash2, AlertCircle } from "lucide-react";
 import { fetchAdapter } from "@/lib/fetchAdapter";
 
-interface DeleteSchoolProps {
-  school: { id: string; name: string };
+interface DeletePrincipalProps {
+  principal: { id: number; name: string };
   variant?: "icon" | "menu-item";
 }
 
-export const DeleteSchool = ({
-  school,
+export const DeletePrincipal = ({
+  principal,
   variant = "icon",
-}: DeleteSchoolProps) => {
+}: DeletePrincipalProps) => {
   const [open, setOpen] = useState(false);
   const [token, setToken] = useState<string | null>(null);
 
@@ -42,12 +42,12 @@ export const DeleteSchool = ({
     try {
       const response = await fetchAdapter({
         method: "DELETE",
-        path: `school/${school.id}`,
+        path: `users/${principal.id}`,
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.status === 200 || response.status === 204) {
-        toast.success("School deleted successfully");
+        toast.success("Principal deleted successfully");
         setOpen(false);
         setTimeout(() => {
           window.location.reload();
@@ -56,8 +56,8 @@ export const DeleteSchool = ({
         toast.error(`Error: ${response.status}`);
       }
     } catch (error) {
-      console.error("Error deleting school:", error);
-      toast.error("Failed to delete school");
+      console.error("Error deleting principal:", error);
+      toast.error("Failed to delete principal");
     }
   };
 
@@ -84,17 +84,17 @@ export const DeleteSchool = ({
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-destructive" />
-              Delete School
+              Delete Principal
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              Are you sure you want to delete this school? This action cannot be
-              undone.
+              Are you sure you want to delete this principal? This action cannot
+              be undone.
             </DialogDescription>
           </DialogHeader>
 
           <div className="py-4">
             <p className="text-sm font-medium">
-              School: <span className="font-bold">{school.name}</span>
+              Principal: <span className="font-bold">{principal.name}</span>
             </p>
           </div>
 
@@ -113,7 +113,7 @@ export const DeleteSchool = ({
               className="w-full sm:w-auto"
               onClick={handleDelete}
             >
-              Delete School
+              Delete Principal
             </Button>
           </DialogFooter>
         </DialogContent>

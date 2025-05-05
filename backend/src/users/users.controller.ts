@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -35,5 +36,10 @@ export class UsersController {
   @Get(':role')
   findUserByRole(@Param('role') role: string) {
     return this.usersService.listUsersByRole(role as Role);
+  }
+
+  @Delete(':id')
+  deleteUser(@Param('id') id: number) {
+    return this.usersService.delete(id);
   }
 }

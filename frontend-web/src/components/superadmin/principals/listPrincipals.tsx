@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Pencil, Trash2, Search } from "lucide-react";
+import { MoreHorizontal, Trash2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fetchAdapter } from "@/lib/fetchAdapter";
 import React, { useEffect, useState } from "react";
+import { DeletePrincipal } from "./deletePrincipal";
 
 type Principal = {
   id: number;
@@ -165,9 +166,17 @@ export const ListPrincipals = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuItem className="text-red-600 cursor-pointer focus:text-red-700 focus:bg-red-100 dark:focus:bg-red-900/50">
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
+                          <DropdownMenuItem
+                            className="text-red-600 cursor-pointer focus:text-red-700 focus:bg-red-100 dark:focus:bg-red-900/50"
+                            onSelect={(e) => e.preventDefault()}
+                          >
+                            <DeletePrincipal
+                              principal={{
+                                id: Number(principal.id),
+                                name: principal.name,
+                              }}
+                              variant="menu-item"
+                            />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

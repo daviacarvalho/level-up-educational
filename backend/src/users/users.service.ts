@@ -3,11 +3,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { HashingServiceProtocol } from 'src/auth/hash/hashing.service';
 import { Role } from './dto/role.enum';
+import { HelperService } from 'src/helper/helper.service';
+import { find } from 'rxjs';
 @Injectable()
 export class UsersService {
   constructor(
     private prisma: PrismaService,
     private hashingService: HashingServiceProtocol,
+    private helperService: HelperService,
   ) {}
 
   async listAll() {
@@ -68,6 +71,7 @@ export class UsersService {
       const tempPassword = Math.random().toString(36).slice(-8);
       const hashedPassword = await this.hashingService.hash(tempPassword);
       console.log('Temporary password generated:', tempPassword);
+
       const newUser = await this.prisma.user.create({
         data: {
           name: createUserDto.name,
@@ -78,6 +82,12 @@ export class UsersService {
           schoolId: createUserDto.schoolId,
         },
       });
+
+      await this.helperService.sendPrincipalWelcomeEmail(
+        createUserDto.email,
+        tempPassword,
+        createUserDto.name,
+      );
 
       const { password, ...userWithoutPassword } = newUser;
       return userWithoutPassword;
@@ -100,5 +110,21 @@ export class UsersService {
 
     const { password, ...userWithoutPassword } = newUser;
     return userWithoutPassword;
+  }
+
+  async delete(id: number) {
+    const findUser = await this.prisma.user.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!findUser) {
+      throw new HttpException('Task not found', HttpStatus.NOT_FOUND);
+    }
+
+    const deletedUser = await this.prisma.user.delete({
+      where: { id: Number(id) },
+    });
+
+    return deletedUser;
   }
 }
