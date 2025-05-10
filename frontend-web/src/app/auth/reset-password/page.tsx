@@ -1,14 +1,16 @@
-import { LoginForm } from "@/components/auth/loginForm";
+"use client";
+
+import { ResetPasswordForm } from "@/components/auth/resetPassword";
 import Link from "next/link";
 import {
   Award,
   BarChart3,
   Sparkles,
   GraduationCap,
-  BookOpen,
+  KeyRound,
 } from "lucide-react";
 
-export default function LoginPage() {
+export default function ResetPassword() {
   return (
     <div className="min-h-screen w-full flex">
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 lg:p-16 bg-white">
@@ -23,23 +25,26 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-10">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Welcome!</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+              Reset Password
+            </h2>
             <p className="text-gray-600">
-              Sign in to your account to manage your school and classes
+              Enter your email to receive a password reset link or reset your
+              password if you have a token
             </p>
           </div>
 
-          <LoginForm />
+          <ResetPasswordForm />
 
           <div className="mt-8">
             <div className="text-center space-y-4">
               <p className="text-sm text-gray-600">
-                Forgot your password?{" "}
+                Remember your password?{" "}
                 <Link
-                  href="/auth/reset-password"
+                  href="/auth/login"
                   className="text-primary hover:text-primary/90 font-medium"
                 >
-                  Reset password
+                  Back to login
                 </Link>
               </p>
             </div>
@@ -62,16 +67,16 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden">
         <div className="absolute inset-0 flex flex-col items-center justify-center p-12">
           <div className="w-24 h-24 rounded-full bg-white/90 flex items-center justify-center mb-8 shadow-lg">
-            <BookOpen className="w-12 h-12 text-primary" />
+            <KeyRound className="w-12 h-12 text-primary" />
           </div>
 
           <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center">
-            Transform Learning into an Adventure
+            Secure Account Recovery
           </h2>
 
           <p className="text-xl text-gray-700 max-w-lg text-center mb-12">
-            Create interactive quizzes, track student progress, and make
-            education engaging through gamification
+            We've made it easy to reset your password and regain access to your
+            educational platform
           </p>
 
           <div className="grid grid-cols-3 gap-8 w-full max-w-lg">
@@ -80,7 +85,7 @@ export default function LoginPage() {
                 <Sparkles className="w-8 h-8 text-primary" />
               </div>
               <span className="text-lg font-medium text-gray-800 text-center">
-                XP
+                Simple
               </span>
             </div>
 
@@ -89,7 +94,7 @@ export default function LoginPage() {
                 <BarChart3 className="w-8 h-8 text-primary" />
               </div>
               <span className="text-lg font-medium text-gray-800 text-center">
-                Rankings
+                Secure
               </span>
             </div>
 
@@ -98,7 +103,7 @@ export default function LoginPage() {
                 <Award className="w-8 h-8 text-primary" />
               </div>
               <span className="text-lg font-medium text-gray-800 text-center">
-                Rewards
+                Fast
               </span>
             </div>
           </div>
