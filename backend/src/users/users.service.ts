@@ -4,7 +4,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { HashingServiceProtocol } from 'src/auth/hash/hashing.service';
 import { Role } from './dto/role.enum';
 import { HelperService } from 'src/helper/helper.service';
-import { find } from 'rxjs';
 @Injectable()
 export class UsersService {
   constructor(

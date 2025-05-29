@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import jwtConfig from './config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthTokenGuard } from './guards/auth-token.guard';
+import { HelperModule } from 'src/helper/helper.module';
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { AuthTokenGuard } from './guards/auth-token.guard';
     PrismaModule,
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
+    HelperModule,
   ],
   providers: [
     {

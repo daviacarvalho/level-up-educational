@@ -134,7 +134,8 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   classId: 'classId',
   schoolId: 'schoolId',
-  xp: 'xp'
+  xp: 'xp',
+  resetPasswordToken: 'resetPasswordToken'
 };
 
 exports.Prisma.InviteScalarFieldEnum = {

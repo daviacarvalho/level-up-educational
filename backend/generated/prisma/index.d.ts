@@ -4045,6 +4045,7 @@ export namespace Prisma {
     classId: number | null
     schoolId: number | null
     xp: number | null
+    resetPasswordToken: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -4056,6 +4057,7 @@ export namespace Prisma {
     classId: number | null
     schoolId: number | null
     xp: number | null
+    resetPasswordToken: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -4067,6 +4069,7 @@ export namespace Prisma {
     classId: number
     schoolId: number
     xp: number
+    resetPasswordToken: number
     _all: number
   }
 
@@ -4094,6 +4097,7 @@ export namespace Prisma {
     classId?: true
     schoolId?: true
     xp?: true
+    resetPasswordToken?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -4105,6 +4109,7 @@ export namespace Prisma {
     classId?: true
     schoolId?: true
     xp?: true
+    resetPasswordToken?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -4116,6 +4121,7 @@ export namespace Prisma {
     classId?: true
     schoolId?: true
     xp?: true
+    resetPasswordToken?: true
     _all?: true
   }
 
@@ -4214,6 +4220,7 @@ export namespace Prisma {
     classId: number | null
     schoolId: number | null
     xp: number
+    resetPasswordToken: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -4244,6 +4251,7 @@ export namespace Prisma {
     classId?: boolean
     schoolId?: boolean
     xp?: boolean
+    resetPasswordToken?: boolean
     class?: boolean | User$classArgs<ExtArgs>
     school?: boolean | User$schoolArgs<ExtArgs>
     answers?: boolean | User$answersArgs<ExtArgs>
@@ -4259,6 +4267,7 @@ export namespace Prisma {
     classId?: boolean
     schoolId?: boolean
     xp?: boolean
+    resetPasswordToken?: boolean
     class?: boolean | User$classArgs<ExtArgs>
     school?: boolean | User$schoolArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -4272,6 +4281,7 @@ export namespace Prisma {
     classId?: boolean
     schoolId?: boolean
     xp?: boolean
+    resetPasswordToken?: boolean
     class?: boolean | User$classArgs<ExtArgs>
     school?: boolean | User$schoolArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -4285,9 +4295,10 @@ export namespace Prisma {
     classId?: boolean
     schoolId?: boolean
     xp?: boolean
+    resetPasswordToken?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "classId" | "schoolId" | "xp", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "classId" | "schoolId" | "xp" | "resetPasswordToken", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     class?: boolean | User$classArgs<ExtArgs>
     school?: boolean | User$schoolArgs<ExtArgs>
@@ -4319,6 +4330,7 @@ export namespace Prisma {
       classId: number | null
       schoolId: number | null
       xp: number
+      resetPasswordToken: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -4753,6 +4765,7 @@ export namespace Prisma {
     readonly classId: FieldRef<"User", 'Int'>
     readonly schoolId: FieldRef<"User", 'Int'>
     readonly xp: FieldRef<"User", 'Int'>
+    readonly resetPasswordToken: FieldRef<"User", 'String'>
   }
     
 
@@ -10869,7 +10882,8 @@ export namespace Prisma {
     role: 'role',
     classId: 'classId',
     schoolId: 'schoolId',
-    xp: 'xp'
+    xp: 'xp',
+    resetPasswordToken: 'resetPasswordToken'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -11124,6 +11138,7 @@ export namespace Prisma {
     classId?: IntNullableFilter<"User"> | number | null
     schoolId?: IntNullableFilter<"User"> | number | null
     xp?: IntFilter<"User"> | number
+    resetPasswordToken?: StringNullableFilter<"User"> | string | null
     class?: XOR<ClassNullableScalarRelationFilter, ClassWhereInput> | null
     school?: XOR<SchoolNullableScalarRelationFilter, SchoolWhereInput> | null
     answers?: QuizAnswerListRelationFilter
@@ -11138,6 +11153,7 @@ export namespace Prisma {
     classId?: SortOrderInput | SortOrder
     schoolId?: SortOrderInput | SortOrder
     xp?: SortOrder
+    resetPasswordToken?: SortOrderInput | SortOrder
     class?: ClassOrderByWithRelationInput
     school?: SchoolOrderByWithRelationInput
     answers?: QuizAnswerOrderByRelationAggregateInput
@@ -11155,6 +11171,7 @@ export namespace Prisma {
     classId?: IntNullableFilter<"User"> | number | null
     schoolId?: IntNullableFilter<"User"> | number | null
     xp?: IntFilter<"User"> | number
+    resetPasswordToken?: StringNullableFilter<"User"> | string | null
     class?: XOR<ClassNullableScalarRelationFilter, ClassWhereInput> | null
     school?: XOR<SchoolNullableScalarRelationFilter, SchoolWhereInput> | null
     answers?: QuizAnswerListRelationFilter
@@ -11169,6 +11186,7 @@ export namespace Prisma {
     classId?: SortOrderInput | SortOrder
     schoolId?: SortOrderInput | SortOrder
     xp?: SortOrder
+    resetPasswordToken?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -11188,6 +11206,7 @@ export namespace Prisma {
     classId?: IntNullableWithAggregatesFilter<"User"> | number | null
     schoolId?: IntNullableWithAggregatesFilter<"User"> | number | null
     xp?: IntWithAggregatesFilter<"User"> | number
+    resetPasswordToken?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type InviteWhereInput = {
@@ -11597,6 +11616,7 @@ export namespace Prisma {
     password: string
     role: $Enums.Role
     xp?: number
+    resetPasswordToken?: string | null
     class?: ClassCreateNestedOneWithoutUsersInput
     school?: SchoolCreateNestedOneWithoutUsersInput
     answers?: QuizAnswerCreateNestedManyWithoutUserInput
@@ -11611,6 +11631,7 @@ export namespace Prisma {
     classId?: number | null
     schoolId?: number | null
     xp?: number
+    resetPasswordToken?: string | null
     answers?: QuizAnswerUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -11620,6 +11641,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     class?: ClassUpdateOneWithoutUsersNestedInput
     school?: SchoolUpdateOneWithoutUsersNestedInput
     answers?: QuizAnswerUpdateManyWithoutUserNestedInput
@@ -11634,6 +11656,7 @@ export namespace Prisma {
     classId?: NullableIntFieldUpdateOperationsInput | number | null
     schoolId?: NullableIntFieldUpdateOperationsInput | number | null
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: QuizAnswerUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -11646,6 +11669,7 @@ export namespace Prisma {
     classId?: number | null
     schoolId?: number | null
     xp?: number
+    resetPasswordToken?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -11654,6 +11678,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -11665,6 +11690,7 @@ export namespace Prisma {
     classId?: NullableIntFieldUpdateOperationsInput | number | null
     schoolId?: NullableIntFieldUpdateOperationsInput | number | null
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InviteCreateInput = {
@@ -12189,6 +12215,7 @@ export namespace Prisma {
     classId?: SortOrder
     schoolId?: SortOrder
     xp?: SortOrder
+    resetPasswordToken?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -12207,6 +12234,7 @@ export namespace Prisma {
     classId?: SortOrder
     schoolId?: SortOrder
     xp?: SortOrder
+    resetPasswordToken?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -12218,6 +12246,7 @@ export namespace Prisma {
     classId?: SortOrder
     schoolId?: SortOrder
     xp?: SortOrder
+    resetPasswordToken?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -13394,6 +13423,7 @@ export namespace Prisma {
     password: string
     role: $Enums.Role
     xp?: number
+    resetPasswordToken?: string | null
     class?: ClassCreateNestedOneWithoutUsersInput
     answers?: QuizAnswerCreateNestedManyWithoutUserInput
   }
@@ -13406,6 +13436,7 @@ export namespace Prisma {
     role: $Enums.Role
     classId?: number | null
     xp?: number
+    resetPasswordToken?: string | null
     answers?: QuizAnswerUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13501,6 +13532,7 @@ export namespace Prisma {
     classId?: IntNullableFilter<"User"> | number | null
     schoolId?: IntNullableFilter<"User"> | number | null
     xp?: IntFilter<"User"> | number
+    resetPasswordToken?: StringNullableFilter<"User"> | string | null
   }
 
   export type InviteUpsertWithWhereUniqueWithoutSchoolInput = {
@@ -13560,6 +13592,7 @@ export namespace Prisma {
     password: string
     role: $Enums.Role
     xp?: number
+    resetPasswordToken?: string | null
     school?: SchoolCreateNestedOneWithoutUsersInput
     answers?: QuizAnswerCreateNestedManyWithoutUserInput
   }
@@ -13572,6 +13605,7 @@ export namespace Prisma {
     role: $Enums.Role
     schoolId?: number | null
     xp?: number
+    resetPasswordToken?: string | null
     answers?: QuizAnswerUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -14227,6 +14261,7 @@ export namespace Prisma {
     password: string
     role: $Enums.Role
     xp?: number
+    resetPasswordToken?: string | null
     class?: ClassCreateNestedOneWithoutUsersInput
     school?: SchoolCreateNestedOneWithoutUsersInput
   }
@@ -14240,6 +14275,7 @@ export namespace Prisma {
     classId?: number | null
     schoolId?: number | null
     xp?: number
+    resetPasswordToken?: string | null
   }
 
   export type UserCreateOrConnectWithoutAnswersInput = {
@@ -14283,6 +14319,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     class?: ClassUpdateOneWithoutUsersNestedInput
     school?: SchoolUpdateOneWithoutUsersNestedInput
   }
@@ -14296,6 +14333,7 @@ export namespace Prisma {
     classId?: NullableIntFieldUpdateOperationsInput | number | null
     schoolId?: NullableIntFieldUpdateOperationsInput | number | null
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuizUpsertWithoutAnswersInput = {
@@ -14336,6 +14374,7 @@ export namespace Prisma {
     role: $Enums.Role
     classId?: number | null
     xp?: number
+    resetPasswordToken?: string | null
   }
 
   export type InviteCreateManySchoolInput = {
@@ -14375,6 +14414,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     class?: ClassUpdateOneWithoutUsersNestedInput
     answers?: QuizAnswerUpdateManyWithoutUserNestedInput
   }
@@ -14387,6 +14427,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     classId?: NullableIntFieldUpdateOperationsInput | number | null
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: QuizAnswerUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -14398,6 +14439,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     classId?: NullableIntFieldUpdateOperationsInput | number | null
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InviteUpdateWithoutSchoolInput = {
@@ -14440,6 +14482,7 @@ export namespace Prisma {
     role: $Enums.Role
     schoolId?: number | null
     xp?: number
+    resetPasswordToken?: string | null
   }
 
   export type QuizCreateManyClassInput = {
@@ -14464,6 +14507,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     school?: SchoolUpdateOneWithoutUsersNestedInput
     answers?: QuizAnswerUpdateManyWithoutUserNestedInput
   }
@@ -14476,6 +14520,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     schoolId?: NullableIntFieldUpdateOperationsInput | number | null
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: QuizAnswerUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -14487,6 +14532,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     schoolId?: NullableIntFieldUpdateOperationsInput | number | null
     xp?: IntFieldUpdateOperationsInput | number
+    resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuizUpdateWithoutClassInput = {

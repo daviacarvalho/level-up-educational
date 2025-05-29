@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Pencil, Trash2, Search } from "lucide-react";
+import { MoreHorizontal, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -20,6 +20,11 @@ import {
 import { useEffect, useState } from "react";
 import { fetchAdapter } from "@/lib/fetchAdapter";
 import { DeleteSchool } from "./deleteSchool";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Building2, Users, GraduationCap, Plus, MapPin } from "lucide-react";
+import { CreateSchool } from "./createSchool";
+
 type Principal = {
   id: number;
   name: string;
@@ -32,6 +37,8 @@ type School = {
   city: string;
   principalName: string;
   principal?: Principal;
+  teachers: 245;
+  students: 18;
 };
 
 export const ListSchools = () => {
@@ -82,123 +89,186 @@ export const ListSchools = () => {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center space-x-2 mb-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search schools by name..."
-            className="pl-8 w-full"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+    <div className="min-h-screen bg-gradient-to-br from-white via-[oklch(0.98_0.02_120)] to-[oklch(0.95_0.08_120)]/20">
+      {/* Header */}
+      <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-black">Schools</h1>
+              <p className="text-gray-600 italic">
+                Manage all partner schools 🏫
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  placeholder="Search schools..."
+                  className="pl-10 w-64 border-2 border-gray-200 rounded-xl focus:border-[oklch(0.9_0.15_120)]"
+                />
+              </div>
+              <CreateSchool />
+            </div>
+          </div>
         </div>
-      </div>
-      {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          <p className="ml-3 text-muted-foreground">Loading schools...</p>
+      </header>
+
+      <main className="p-6 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="border-2 border-black rounded-2xl bg-white shadow-lg shadow-[oklch(0.9_0.15_120)]/10">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Total Schools
+              </CardTitle>
+              <Building2 className="h-5 w-5 text-[oklch(0.9_0.15_120)]" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-black">
+                {schools.length}
+              </div>
+              <p className="text-xs text-gray-500">4 active, 1 pending</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-black rounded-2xl bg-white shadow-lg shadow-[oklch(0.9_0.15_120)]/10">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Total Students
+              </CardTitle>
+              <GraduationCap className="h-5 w-5 text-[oklch(0.9_0.15_120)]" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-black">
+                {schools
+                  .reduce((sum, school) => sum + school.students, 0)
+                  .toLocaleString()}
+              </div>
+              <p className="text-xs text-gray-500">Across all schools</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-black rounded-2xl bg-white shadow-lg shadow-[oklch(0.9_0.15_120)]/10">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Total Principals
+              </CardTitle>
+              <Users className="h-5 w-5 text-[oklch(0.9_0.15_120)]" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-black">
+                {schools
+                  .reduce((sum, school) => sum + school.students, 0)
+                  .toLocaleString()}
+              </div>
+              <p className="text-xs text-gray-500">Across all schools</p>
+            </CardContent>
+          </Card>
         </div>
-      ) : filteredSchools.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-40 bg-muted/20 rounded-lg border border-dashed border-muted p-8">
-          <p className="text-lg font-medium mb-2">No schools found</p>
-          <p className="text-sm text-muted-foreground text-center">
-            Add a new school to get started.
-          </p>
-        </div>
-      ) : (
-        <div className="rounded-lg border overflow-hidden">
-          <Table>
-            <TableHeader className="bg-muted/50">
-              <TableRow>
-                <TableHead className="font-semibold">Name</TableHead>
-                <TableHead className="font-semibold">City</TableHead>
-                <TableHead className="font-semibold">Principal</TableHead>
-                <TableHead className="font-semibold">Principal Email</TableHead>
-                <TableHead className="text-right font-semibold">
-                  Actions
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredSchools.map((school, index) => (
-                <TableRow
-                  key={school.id}
-                  className={`transition-colors hover:bg-muted/30 table-row-hover table-row-fade-in ${
-                    index % 2 === 0 ? "bg-background" : "bg-muted/10"
-                  }`}
-                  style={{ animationDelay: `${0.05 * index}s` }}
-                >
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 flex items-center justify-center font-semibold">
-                        {school.name.charAt(0)}
-                      </div>
-                      <span className="font-medium">{school.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
-                      {school.city}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {school.principalName ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 flex items-center justify-center text-xs font-semibold">
-                          {school.principalName.charAt(0)}
+
+        <Card className="border-2 border-black rounded-2xl bg-white shadow-lg shadow-[oklch(0.9_0.15_120)]/10">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-black flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-[oklch(0.9_0.15_120)]" />
+              All Schools
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow className="border-gray-200">
+                  <TableHead className="font-semibold text-black">
+                    School Name
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
+                    Principal
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
+                    Location
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
+                    Students
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
+                    Teachers
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
+                    Actions
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {schools.map((school) => (
+                  <TableRow
+                    key={school.id}
+                    className="border-gray-100 hover:bg-[oklch(0.98_0.02_120)]"
+                  >
+                    <TableCell>
+                      <div>
+                        <div className="font-semibold text-black">
+                          {school.name}
                         </div>
-                        <span>{school.principalName}</span>
                       </div>
-                    ) : (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-500">
-                        Not assigned
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {school.principal?.email ? (
-                      <span className="text-muted-foreground text-sm">
-                        {school.principal.email}
-                      </span>
-                    ) : (
-                      <span className="text-muted-foreground text-sm">N/A</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
+                    </TableCell>
+                    <TableCell className="text-gray-700">
+                      {school.principalName}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1 text-gray-700">
+                        <MapPin className="w-3 h-3" />
+                        {school.city}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <GraduationCap className="w-4 h-4 text-[oklch(0.9_0.15_120)]" />
+                        <span className="font-medium text-black">
+                          {school.students}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4 text-[oklch(0.9_0.15_120)]" />
+                        <span className="font-medium text-black">
+                          {school.teachers}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 p-0 hover:bg-[oklch(0.95_0.08_120)]"
                           >
-                            <span className="sr-only">Open menu</span>
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuItem
-                            className="text-red-600 cursor-pointer focus:text-red-700 focus:bg-red-100 dark:focus:bg-red-900/50"
-                            onSelect={(e) => e.preventDefault()}
-                          >
-                            <DeleteSchool
-                              school={{ id: school.id, name: school.name }}
-                              variant="menu-item"
-                            />
+                        <DropdownMenuContent
+                          align="end"
+                          className="border-2 border-black rounded-xl"
+                        >
+                          <DropdownMenuItem className="hover:bg-[oklch(0.95_0.08_120)]">
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="hover:bg-[oklch(0.95_0.08_120)]">
+                            Edit School
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-red-600 hover:bg-red-50">
+                            Delete School
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </main>
     </div>
   );
 };

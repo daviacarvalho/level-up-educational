@@ -46,6 +46,8 @@ model User {
   school   School?      @relation(fields: [schoolId], references: [id])
   xp       Int          @default(0)
   answers  QuizAnswer[]
+
+  resetPasswordToken String?
 }
 
 model Invite {

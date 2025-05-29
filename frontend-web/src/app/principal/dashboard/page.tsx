@@ -1,9 +1,11 @@
 "use client";
 
+import Dashboard from "@/components/principal/dashboard";
+
 export default function DashboardPage() {
   return (
     <>
-      <h1>Dashboard Page</h1>
+      <Dashboard />  
     </>
   );
 }

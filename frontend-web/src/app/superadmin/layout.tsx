@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { Sidebar } from "@/components/superadmin/sidebar";
+import { AdminSidebar } from "@/components/superadmin/sidebar";
 import { ProtectedRoute } from "@/components/auth/protectedRoute";
 
 export default function DashboardLayout({
@@ -11,14 +11,9 @@ export default function DashboardLayout({
 }) {
   return (
     <ProtectedRoute>
-      <div className="flex h-screen bg-background">
-        <Sidebar />
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <header className="h-16 border-b flex items-center px-6 bg-background/95 backdrop-blur-sm sticky top-0 z-10">
-            <h1 className="text-xl font-semibold">Super Admin Portal</h1>
-          </header>
-          <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
-        </div>
+      <div className="flex h-screen bg-white">
+        <AdminSidebar />
+        <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
       </div>
     </ProtectedRoute>
   );
