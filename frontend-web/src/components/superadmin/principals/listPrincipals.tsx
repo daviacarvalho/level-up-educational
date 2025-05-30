@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Trash2, Search } from "lucide-react";
+import { MoreHorizontal, Search, Mail, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -20,6 +20,10 @@ import {
 import { fetchAdapter } from "@/lib/fetchAdapter";
 import React, { useEffect, useState } from "react";
 import { DeletePrincipal } from "./deletePrincipal";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Users, Building2, Phone } from "lucide-react";
 
 type Principal = {
   id: number;
@@ -30,6 +34,7 @@ type Principal = {
     id: string;
     name: string;
   };
+  students: number;
 };
 
 export const ListPrincipals = () => {
@@ -79,115 +84,178 @@ export const ListPrincipals = () => {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center space-x-2 mb-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search principals by name..."
-            className="pl-8 w-full"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+    <div className="min-h-screen bg-gradient-to-br from-white via-[oklch(0.98_0.02_120)] to-[oklch(0.95_0.08_120)]/20">
+      {/* Header */}
+      <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-black">Principals</h1>
+              <p className="text-gray-600 italic">
+                Manage school principals and administrators 👨‍🎓
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  placeholder="Search principals..."
+                  className="pl-10 w-64 border-2 border-gray-200 rounded-xl focus:border-[oklch(0.9_0.15_120)]"
+                />
+              </div>
+              <Button className="bg-[oklch(0.9_0.15_120)] text-black border-2 border-black rounded-xl font-semibold hover:bg-white hover:shadow-lg hover:shadow-[oklch(0.9_0.15_120)]/25 transition-all duration-300">
+                <Plus className="w-4 h-4 mr-2" />
+                Invite Principal
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-      {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary loading-spinner"></div>
-          <p className="ml-3 text-muted-foreground">Loading principals...</p>
+      </header>
+
+      <main className="p-6 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="border-2 border-black rounded-2xl bg-white shadow-lg shadow-[oklch(0.9_0.15_120)]/10">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Total Principals
+              </CardTitle>
+              <Users className="h-5 w-5 text-[oklch(0.9_0.15_120)]" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-black">
+                {principals.length}
+              </div>
+              <p className="text-xs text-gray-500">4 active, 1 pending</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-black rounded-2xl bg-white shadow-lg shadow-[oklch(0.9_0.15_120)]/10">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Active This Week
+              </CardTitle>
+              <Building2 className="h-5 w-5 text-[oklch(0.9_0.15_120)]" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-black">4</div>
+              <p className="text-xs text-gray-500">80% engagement rate</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-black rounded-2xl bg-white shadow-lg shadow-[oklch(0.9_0.15_120)]/10">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Avg Response Time
+              </CardTitle>
+              <Mail className="h-5 w-5 text-[oklch(0.9_0.15_120)]" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-black">2.4h</div>
+              <p className="text-xs text-gray-500">Excellent support! 📞</p>
+            </CardContent>
+          </Card>
         </div>
-      ) : filteredPrincipals.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-40 bg-muted/20 rounded-lg border border-dashed border-muted p-8 empty-state-pulse">
-          <p className="text-lg font-medium mb-2">No principals found</p>
-          <p className="text-sm text-muted-foreground text-center">
-            Add a new principal to get started.
-          </p>
-        </div>
-      ) : (
-        <div className="rounded-lg border overflow-hidden">
-          <Table>
-            <TableHeader className="bg-muted/50">
-              <TableRow>
-                <TableHead className="font-semibold">Name</TableHead>
-                <TableHead className="font-semibold">Email</TableHead>
-                <TableHead className="font-semibold">School</TableHead>
-                <TableHead className="text-right font-semibold">
-                  Actions
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredPrincipals.map((principal, index) => (
-                <TableRow
-                  key={principal.id}
-                  className={`transition-colors hover:bg-muted/30 table-row-hover table-row-fade-in ${
-                    index % 2 === 0 ? "bg-background" : "bg-muted/10"
-                  }`}
-                  style={{ animationDelay: `${0.05 * index}s` }}
-                >
-                  <TableCell className="font-medium">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                        {principal.name.charAt(0)}
+
+        {/* Principals Table */}
+        <Card className="border-2 border-black rounded-2xl bg-white shadow-lg shadow-[oklch(0.9_0.15_120)]/10">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-black flex items-center gap-2">
+              <Users className="w-5 h-5 text-[oklch(0.9_0.15_120)]" />
+              All Principals
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow className="border-gray-200">
+                  <TableHead className="font-semibold text-black">
+                    Principal
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
+                    School
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
+                    Contact
+                  </TableHead>
+                  <TableHead className="font-semibold text-black">
+                    Actions
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {principals.map((principal) => (
+                  <TableRow
+                    key={principal.id}
+                    className="border-gray-100 hover:bg-[oklch(0.98_0.02_120)]"
+                  >
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-10 h-10 border-2 border-black">
+                          <AvatarImage src={"/placeholder.svg"} />
+                          <AvatarFallback className="bg-[oklch(0.9_0.15_120)] text-black font-semibold">
+                            {principal.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="font-semibold text-black">
+                            {principal.name}
+                          </div>
+                        </div>
                       </div>
-                      <span>{principal.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">
-                        {principal.email}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {principal.school?.name ? (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-500">
-                        {principal.school.name}
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-500">
-                        Not assigned
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium text-black">
+                        {principal.school?.name}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1 text-sm text-gray-700">
+                          <Mail className="w-3 h-3" />
+                          {principal.email}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 p-0 hover:bg-[oklch(0.95_0.08_120)]"
                           >
-                            <span className="sr-only">Open menu</span>
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuItem
-                            className="text-red-600 cursor-pointer focus:text-red-700 focus:bg-red-100 dark:focus:bg-red-900/50"
-                            onSelect={(e) => e.preventDefault()}
-                          >
-                            <DeletePrincipal
-                              principal={{
-                                id: Number(principal.id),
-                                name: principal.name,
-                              }}
-                              variant="menu-item"
-                            />
+                        <DropdownMenuContent
+                          align="end"
+                          className="border-2 border-black rounded-xl"
+                        >
+                          <DropdownMenuItem className="hover:bg-[oklch(0.95_0.08_120)]">
+                            View Profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="hover:bg-[oklch(0.95_0.08_120)]">
+                            Send Message
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="hover:bg-[oklch(0.95_0.08_120)]">
+                            View School
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-red-600 hover:bg-red-50">
+                            Delete Account
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </main>
     </div>
   );
 };

@@ -187,7 +187,6 @@ export const CreatePrincipal = () => {
                       </div>
                     </SelectTrigger>
                     <SelectContent>
-                      {/* Opção para não selecionar nenhuma escola */}
                       <SelectItem value="none">No school assigned</SelectItem>
                       {schools.map((school) => (
                         <SelectItem key={school.id} value={school.id}>

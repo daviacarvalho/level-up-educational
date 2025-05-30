@@ -28,53 +28,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
-interface School {
-  name: string;
-  principalName: string;
-  email: string;
-  phone: string;
-  city: string;
-  type: string;
-  students: number;
-  description: string;
-}
-
-const initialSchoolData: School = {
-  name: "",
-  principalName: "",
-  email: "",
-  phone: "",
-  city: "",
-  type: "",
-  students: 0,
-  description: "",
-};
 
 export const CreateSchool = () => {
   const [open, setOpen] = useState(false);
-  const [schoolData, setSchoolData] = useState<School>(initialSchoolData);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [token, setToken] = useState<string | null>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setSchoolData((prev) => ({
-      ...prev,
-      [name]: name === "students" ? Number.parseInt(value) || 0 : value,
-    }));
-  };
-
-  const handleSelectChange = (value: string, name: string) => {
-    setSchoolData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [type, setType] = useState("");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -93,8 +57,8 @@ export const CreateSchool = () => {
         method: "POST",
         path: "school",
         body: {
-          name: schoolData.name,
-          city: schoolData.city,
+          name: name,
+          city: location,
         },
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -105,7 +69,6 @@ export const CreateSchool = () => {
           setOpen(false);
           setTimeout(() => {
             setIsSuccess(false);
-            setSchoolData(initialSchoolData);
           }, 300);
         }, 2000);
       } else {
@@ -153,7 +116,7 @@ export const CreateSchool = () => {
                 School Added Successfully!
               </h3>
               <p className="text-gray-600">
-                {schoolData.name} has been added to your schools list.
+                {name} has been added to your schools list.
               </p>
             </div>
           ) : (
@@ -166,8 +129,8 @@ export const CreateSchool = () => {
                   <Input
                     id="name"
                     name="name"
-                    value={schoolData.name}
-                    onChange={handleChange}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="Enter school name"
                     className="h-10 border-2 border-gray-200 rounded-xl focus:border-[oklch(0.9_0.15_120)] focus:ring-[oklch(0.9_0.15_120)] transition-colors"
                     required
@@ -181,8 +144,8 @@ export const CreateSchool = () => {
                   <Input
                     id="location"
                     name="location"
-                    value={schoolData.city}
-                    onChange={handleChange}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
                     placeholder="City, State"
                     className="h-10 border-2 border-gray-200 rounded-xl focus:border-[oklch(0.9_0.15_120)] focus:ring-[oklch(0.9_0.15_120)] transition-colors"
                     required
@@ -194,8 +157,8 @@ export const CreateSchool = () => {
                     School Type <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={schoolData.type}
-                    onValueChange={(value) => handleSelectChange(value, "type")}
+                    value={type}
+                    onValueChange={(value) => setType(value)}
                     required
                   >
                     <SelectTrigger className="h-10 border-2 border-gray-200 rounded-xl focus:border-[oklch(0.9_0.15_120)] focus:ring-[oklch(0.9_0.15_120)] transition-colors">

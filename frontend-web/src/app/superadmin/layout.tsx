@@ -11,9 +11,9 @@ export default function DashboardLayout({
 }) {
   return (
     <ProtectedRoute>
-      <div className="flex h-screen bg-white">
+      <div className="flex h-screen">
         <AdminSidebar />
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
+        <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </ProtectedRoute>
   );

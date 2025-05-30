@@ -21,8 +21,7 @@ import { useEffect, useState } from "react";
 import { fetchAdapter } from "@/lib/fetchAdapter";
 import { DeleteSchool } from "./deleteSchool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Building2, Users, GraduationCap, Plus, MapPin } from "lucide-react";
+import { Building2, Users, GraduationCap, MapPin } from "lucide-react";
 import { CreateSchool } from "./createSchool";
 
 type Principal = {
@@ -31,14 +30,15 @@ type Principal = {
   email: string;
   role: "principal";
 };
+
 type School = {
   id: string;
   name: string;
   city: string;
   principalName: string;
   principal?: Principal;
-  teachers: 245;
-  students: 18;
+  teachers: number;
+  students: number;
 };
 
 export const ListSchools = () => {
@@ -82,15 +82,18 @@ export const ListSchools = () => {
     }
   }, [token]);
 
-  const filteredSchools = schools
-    .filter((school) =>
-      school.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const filteredSchools = schools.filter((school) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      school.name.toLowerCase().includes(term) ||
+      school.city.toLowerCase().includes(term) ||
+      (school.principalName &&
+        school.principalName.toLowerCase().includes(term))
+    );
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-[oklch(0.98_0.02_120)] to-[oklch(0.95_0.08_120)]/20">
-      {/* Header */}
       <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
@@ -106,6 +109,8 @@ export const ListSchools = () => {
                 <Input
                   placeholder="Search schools..."
                   className="pl-10 w-64 border-2 border-gray-200 rounded-xl focus:border-[oklch(0.9_0.15_120)]"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <CreateSchool />
@@ -198,7 +203,7 @@ export const ListSchools = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {schools.map((school) => (
+                {filteredSchools.map((school) => (
                   <TableRow
                     key={school.id}
                     className="border-gray-100 hover:bg-[oklch(0.98_0.02_120)]"
@@ -211,7 +216,9 @@ export const ListSchools = () => {
                       </div>
                     </TableCell>
                     <TableCell className="text-gray-700">
-                      {school.principalName}
+                      {school.principalName
+                        ? school.principalName
+                        : "Principal not assigned"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1 text-gray-700">
